@@ -17,7 +17,8 @@ func main() {
 
 func productsHandler(w http.ResponseWriter, r *http.Request) {
 	p := Product{Id: 11, Name: "Schuhe"}
-	products := []Product{p}
+	p2 := Product{Id: 12, Name: "T-Shirt"}
+	products := []Product{p, p2}
 	json, _ := json.Marshal(products)
 	w.Write(json)
 }
