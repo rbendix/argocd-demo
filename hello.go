@@ -1,23 +1,23 @@
 package main
 
 import (
-	"fmt"
-	"io"
+	"encoding/json"
 	"net/http"
 )
 
-func getRoot(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("got / request\n")
-	io.WriteString(w, "This is my website!\n")
+type Product struct {
+	Id   int
+	Name string
 }
-func getHello(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("got /hello request\n")
-	io.WriteString(w, "Hello, HTTP!\n")
-}
-func main() {
-	http.HandleFunc("/", getRoot)
-	http.HandleFunc("/hello", getHello)
 
-	err := http.ListenAndServe(":3333", nil)
-	fmt.Print(err)
+func main() {
+	http.HandleFunc("/catalog/products", productsHandler)
+	http.ListenAndServe(":3333", nil)
+}
+
+func productsHandler(w http.ResponseWriter, r *http.Request) {
+	p := Product{Id: 11, Name: "Schuhe"}
+	products := []Product{p}
+	json, _ := json.Marshal(products)
+	w.Write(json)
 }
